@@ -7,12 +7,13 @@ class Digipot
 {
 public:
 Digipot(byte cs_pin, byte ud_pin, byte value);
+byte constrain_value(byte value);
 void set_tap(byte value);
 byte get_tap();
-void up();
-void down();
+void move(boolean direction, byte ticks);
 void cs(boolean b);
 void ud(boolean b);
+void do_delay();
 
 
 private:
