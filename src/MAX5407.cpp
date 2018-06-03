@@ -6,6 +6,7 @@
 static byte top_tap = 31;
 static boolean UP   = true;
 static boolean DOWN = false;
+static boolean debug = true;
 
 Digipot::Digipot(byte cs_pin, byte ud_pin, byte value)
 {
@@ -28,8 +29,9 @@ byte Digipot::constrain_value(byte value)
 
 void Digipot::set_tap(byte value)
 {
-  byte diff = value - _tap;
+  int diff = value - _tap;
   (diff > 0) ? move(UP, diff) : move(DOWN, -diff);
+  _tap = value;
 }
 
 byte Digipot::get_tap()
@@ -37,12 +39,15 @@ byte Digipot::get_tap()
   return _tap;
 }
 
-void Digipot::move(boolean direction, byte ticks)
+void Digipot::move(boolean direction, int ticks)
 {
-  Serial.print("move dir: ");
-  Serial.print(direction);
-  Serial.print(" ticks: ");
-  Serial.println(ticks);
+  if(debug)
+  {
+    Serial.print("move dir: ");
+    Serial.print(direction);
+    Serial.print(" ticks: ");
+    Serial.println(ticks);
+  }
 
   ud(direction);
   do_delay();
@@ -60,23 +65,30 @@ void Digipot::move(boolean direction, byte ticks)
   cs(LOW);
   do_delay();
   ud(LOW);
+
+  if(debug)
+  {
   Serial.println("  END");
+  }
 }
 
 void Digipot::cs(boolean b)
 {
-  (b) ? Serial.print("C") : Serial.print("X");
+  if(debug)
+    (b) ? Serial.print("C") : Serial.print("X");
   digitalWrite(_cs_pin, b);
 }
 
 void Digipot::ud(boolean b)
 {
-  (b) ? Serial.print("U") : Serial.print("D");
+  if(debug)
+    (b) ? Serial.print("H") : Serial.print("L");
   digitalWrite(_ud_pin, b);
 }
 
 void Digipot::do_delay()
 {
-  Serial.print("_");
+  if(debug)
+    Serial.print("_");
   delayMicroseconds(1);
 }

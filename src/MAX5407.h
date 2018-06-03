@@ -10,7 +10,7 @@ Digipot(byte cs_pin, byte ud_pin, byte value);
 byte constrain_value(byte value);
 void set_tap(byte value);
 byte get_tap();
-void move(boolean direction, byte ticks);
+void move(boolean direction, int ticks);
 void cs(boolean b);
 void ud(boolean b);
 void do_delay();
